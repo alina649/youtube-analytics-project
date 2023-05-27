@@ -21,6 +21,34 @@ class Channel:
         self.video_count = channel['items'][0]['statistics']['videoCount']
         self.views_count = channel['items'][0]['statistics']['viewCount']
 
+    def __str__(self):
+        """<название_канала> (<ссылка_на_канал>)"""
+        return f"{self.title} ({self.url})"
+
+    def __add__(self, other):
+        return self.video_count + other.video_count
+
+    def __sub__(self, other):
+        return int(self.video_count) - int(other.video_count)
+
+    def __lt__(self, other):
+        return int(self.video_count) < int(other.video_count)
+
+    def __le__(self, other):
+        return int(self.video_count) <= int(other.video_count)
+
+    def __gt__(self, other):
+        return int(self.video_count) > int(other.video_count)
+
+    def __ge__(self, other):
+        return int(self.video_count) >= int(other.video_count)
+
+
+
+
+
+
+
     @property
     def channel_id(self):
         return self._channel_id
@@ -50,6 +78,6 @@ class Channel:
         list_json['video_count'] = self.video_count
         list_json['views_count'] = self.views_count
 
-        with open('moscowpython.json', 'w') as f:
+        with open('moscowpython.json', 'w', encoding='utf-8') as f:
             json.dump(list_json, f)
 
