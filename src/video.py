@@ -2,7 +2,16 @@ import json
 import os
 from googleapiclient.discovery import build
 
+#class  idCSVError(Exception):
+#   """Класс-исключение для отлавливания ошибки, если файл поврежден"""
 
+#    def __init__(self, video_id):
+#       super().__init__(video_id)
+#      #self.video_id = video_id
+#     self.video_title = None
+#    self.view_count = None
+#  self.like_count = None
+#  self.url = None
 
 
 class Video:
@@ -16,10 +25,20 @@ class Video:
         video_response = Video.get_service().videos().list(part='snippet,statistics,contentDetails,topicDetails',
                                                id=video_id
                                                ).execute()
-        self.video_title = video_response['items'][0]['snippet']['title']  # название
-        self.view_count = video_response['items'][0]['statistics']['viewCount']  # количество просмотров
-        self.like_count = video_response['items'][0]['statistics']['likeCount']  # лайки
-        self.url = video_response['items'][0]['snippet']['thumbnails']["default"]['url']  # ссылка
+        try:
+           self.title = video_response['items'][0]['snippet']['title']  # название
+           self.view_count = video_response['items'][0]['statistics']['viewCount']  # количество просмотров
+           self.like_count = video_response['items'][0]['statistics']['likeCount']  # лайки
+           self.url = video_response['items'][0]['snippet']['thumbnails']["default"]['url']  # ссылка
+
+        except IndexError:
+            self.title = None
+            self.view_count = None
+            self.like_count = None
+            self.url = None
+
+
+
 
 
     @classmethod
@@ -49,7 +68,6 @@ class PLVideo(Video):
                                                        part='contentDetails',
                                                        maxResults=50,
                                                        ).execute()
-
 
 
     def info_playlist(self):
